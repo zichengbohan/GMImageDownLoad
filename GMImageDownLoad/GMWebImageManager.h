@@ -91,7 +91,7 @@ typedef NS_OPTIONS(NSUInteger, GMWebImageOptions) {
     GMWebImageAvoidAutoSetImage = 1 << 11
 };
 
-typedef void(^SDWebImageCompletionBlock)(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL);
+typedef void(^GMWebImageCompletionBlock)(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL);
 
 typedef void(^SDWebImageCompletionWithFinishedBlock)(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL);
 
@@ -288,20 +288,20 @@ typedef NSString *(^SDWebImageCacheKeyFilterBlock)(NSURL *url);
 
 #pragma mark - Deprecated
 
-typedef void(^SDWebImageCompletedBlock)(UIImage *image, NSError *error, SDImageCacheType cacheType) __deprecated_msg("Block type deprecated. Use `SDWebImageCompletionBlock`");
-typedef void(^SDWebImageCompletedWithFinishedBlock)(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished) __deprecated_msg("Block type deprecated. Use `SDWebImageCompletionWithFinishedBlock`");
+//typedef void(^SDWebImageCompletedBlock)(UIImage *image, NSError *error, SDImageCacheType cacheType) __deprecated_msg("Block type deprecated. Use `SDWebImageCompletionBlock`");
+//typedef void(^SDWebImageCompletedWithFinishedBlock)(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished) __deprecated_msg("Block type deprecated. Use `SDWebImageCompletionWithFinishedBlock`");
+//
 
-
-@interface GMWebImageManager (Deprecated)
-
-/**
- *  Downloads the image at the given URL if not present in cache or return the cached version otherwise.
- *
- *  @deprecated This method has been deprecated. Use `downloadImageWithURL:options:progress:completed:`
- */
-- (id <SDWebImageOperation>)downloadWithURL:(NSURL *)url
-                                    options:(GMWebImageOptions)options
-                                   progress:(GMWebImageDownloaderProgressBlock)progressBlock
-                                  completed:(SDWebImageCompletedWithFinishedBlock)completedBlock __deprecated_msg("Method deprecated. Use `downloadImageWithURL:options:progress:completed:`");
-
-@end
+//@interface GMWebImageManager (Deprecated)
+//
+///**
+// *  Downloads the image at the given URL if not present in cache or return the cached version otherwise.
+// *
+// *  @deprecated This method has been deprecated. Use `downloadImageWithURL:options:progress:completed:`
+// */
+//- (id <SDWebImageOperation>)downloadWithURL:(NSURL *)url
+//                                    options:(GMWebImageOptions)options
+//                                   progress:(GMWebImageDownloaderProgressBlock)progressBlock
+//                                  completed:(SDWebImageCompletedWithFinishedBlock)completedBlock __deprecated_msg("Method deprecated. Use `downloadImageWithURL:options:progress:completed:`");
+//
+//@end

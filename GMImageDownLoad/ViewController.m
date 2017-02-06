@@ -28,14 +28,16 @@
     for (int i = 1; i < 9; i++) {
         NSString *path = [[NSBundle mainBundle] pathForResource:[NSString stringWithFormat:@"%d", i] ofType:@"png"];
         NSURL *url = [NSURL fileURLWithPath:path];
-        [arraym addObject:url];
+        NSDictionary *dic = @{@"url":url, @"param": @{@"key":[NSString stringWithFormat:@"%d", i]}};
+        [arraym addObject:dic];
     }
 //    NSURL *url1 = [NSURL URLWithString:@"http://pic6.huitu.com/res/20130116/84481_20130116142820494200_1.jpg"];
 //    NSURL *url2 = [NSURL URLWithString:@"http://pic2.cxtuku.com/00/02/31/b945758fd74d.jpg"];
     
 //    NSURL *url = [NSURL URLWithString:@""];
 //    NSArray *array = @[url1, url2];
-    [self.animationView gm_setAnimationImagesWithURLs:arraym param:nil];
+    NSLog(@"imageUrls:%@", arraym);
+    [self.animationView gm_setAnimationImagesWithURLsAndParams:arraym];
 //    [GMRequest.new postGraphValidateCodeCompeplet:^(NSString *imageCode, NSData *data) {
 ////        self.imageCode = imageCode;
 //        //DebugLog(@"data = %@",data);

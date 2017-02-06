@@ -12,7 +12,7 @@
 
 @interface UIImageView (GMWebCache)
 
-- (NSURL *)sd_imageURL;
+- (NSURL *)gm_imageURL;
 
 /**
  * Set the imageView `image` with an `url`.
@@ -32,7 +32,7 @@
  * @param placeholder The image to be set initially, until the image request finishes.
  * @see sd_setImageWithURL:placeholderImage:options:
  */
-- (void)sd_setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder param:(NSDictionary *)param;
+- (void)gm_setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder param:(NSDictionary *)param;
 
 /**
  * Set the imageView `image` with an `url`, placeholder and custom options.
@@ -43,7 +43,7 @@
  * @param placeholder The image to be set initially, until the image request finishes.
  * @param options     The options to use when downloading the image. @see GMWebImageOptions for the possible values.
  */
-- (void)sd_setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder options:(GMWebImageOptions)options param:(NSDictionary *)param;
+- (void)gm_setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder options:(GMWebImageOptions)options param:(NSDictionary *)param;
 
 /**
  * Set the imageView `image` with an `url`.
@@ -57,7 +57,7 @@
  *                       indicating if the image was retrieved from the local cache or from the network.
  *                       The fourth parameter is the original image url.
  */
-- (void)sd_setImageWithURL:(NSURL *)url completed:(SDWebImageCompletionBlock)completedBlock param:(NSDictionary *)param;
+- (void)gm_setImageWithURL:(NSURL *)url completed:(GMWebImageCompletionBlock)completedBlock param:(NSDictionary *)param;
 
 /**
  * Set the imageView `image` with an `url`, placeholder.
@@ -72,7 +72,7 @@
  *                       indicating if the image was retrieved from the local cache or from the network.
  *                       The fourth parameter is the original image url.
  */
-- (void)sd_setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder completed:(SDWebImageCompletionBlock)completedBlock param:(NSDictionary *)param;
+- (void)gm_setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder completed:(GMWebImageCompletionBlock)completedBlock param:(NSDictionary *)param;
 
 /**
  * Set the imageView `image` with an `url`, placeholder and custom options.
@@ -88,7 +88,7 @@
  *                       indicating if the image was retrieved from the local cache or from the network.
  *                       The fourth parameter is the original image url.
  */
-- (void)sd_setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder options:(GMWebImageOptions)options completed:(SDWebImageCompletionBlock)completedBlock param:(NSDictionary *)param;
+- (void)gm_setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder options:(GMWebImageOptions)options completed:(GMWebImageCompletionBlock)completedBlock param:(NSDictionary *)param;
 
 /**
  * Set the imageView `image` with an `url`, placeholder and custom options.
@@ -105,7 +105,7 @@
  *                       indicating if the image was retrieved from the local cache or from the network.
  *                       The fourth parameter is the original image url.
  */
-- (void)gm_setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder options:(GMWebImageOptions)options progress:(GMWebImageDownloaderProgressBlock)progressBlock completed:(SDWebImageCompletionBlock)completedBlock param:(NSDictionary *)param;
+- (void)gm_setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder options:(GMWebImageOptions)options progress:(GMWebImageDownloaderProgressBlock)progressBlock completed:(GMWebImageCompletionBlock)completedBlock param:(NSDictionary *)param;
 
 /**
  * Set the imageView `image` with an `url` and optionally a placeholder image.
@@ -122,21 +122,21 @@
  *                       indicating if the image was retrieved from the local cache or from the network.
  *                       The fourth parameter is the original image url.
  */
-- (void)sd_setImageWithPreviousCachedImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder options:(GMWebImageOptions)options progress:(GMWebImageDownloaderProgressBlock)progressBlock completed:(SDWebImageCompletionBlock)completedBlock param:(NSDictionary *)param;
+- (void)gm_setImageWithPreviousCachedImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder options:(GMWebImageOptions)options progress:(GMWebImageDownloaderProgressBlock)progressBlock completed:(GMWebImageCompletionBlock)completedBlock param:(NSDictionary *)param;
 
 /**
  * Download an array of images and starts them in an animation loop
  *
- * @param arrayOfURLs An array of NSURL
+ * @param arrayOfURLsAndParams An array of NSURL and Param
  */
-- (void)gm_setAnimationImagesWithURLs:(NSArray *)arrayOfURLs param:(NSDictionary *)param;
+- (void)gm_setAnimationImagesWithURLsAndParams:(NSArray *)arrayOfURLsAndParams;
 
 /**
  * Cancel the current download
  */
-- (void)sd_cancelCurrentImageLoad;
+- (void)gm_cancelCurrentImageLoad;
 
-- (void)sd_cancelCurrentAnimationImagesLoad;
+- (void)gm_cancelCurrentAnimationImagesLoad;
 
 /**
  *  Show activity UIActivityIndicatorView
@@ -149,29 +149,5 @@
  *  @param style The style of the UIActivityIndicatorView
  */
 - (void)setIndicatorStyle:(UIActivityIndicatorViewStyle)style;
-
-@end
-
-
-@interface UIImageView (WebCacheDeprecated)
-
-- (NSURL *)imageURL __deprecated_msg("Use `sd_imageURL`");
-
-- (void)setImageWithURL:(NSURL *)url __deprecated_msg("Method deprecated. Use `sd_setImageWithURL:`");
-- (void)setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder __deprecated_msg("Method deprecated. Use `sd_setImageWithURL:placeholderImage:`");
-- (void)setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder options:(GMWebImageOptions)options __deprecated_msg("Method deprecated. Use `sd_setImageWithURL:placeholderImage:options`");
-
-- (void)setImageWithURL:(NSURL *)url completed:(SDWebImageCompletedBlock)completedBlock __deprecated_msg("Method deprecated. Use `sd_setImageWithURL:completed:`");
-- (void)setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder completed:(SDWebImageCompletedBlock)completedBlock __deprecated_msg("Method deprecated. Use `sd_setImageWithURL:placeholderImage:completed:`");
-- (void)setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder options:(GMWebImageOptions)options completed:(SDWebImageCompletedBlock)completedBlock __deprecated_msg("Method deprecated. Use `sd_setImageWithURL:placeholderImage:options:completed:`");
-- (void)setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder options:(GMWebImageOptions)options progress:(GMWebImageDownloaderProgressBlock)progressBlock completed:(SDWebImageCompletedBlock)completedBlock __deprecated_msg("Method deprecated. Use `sd_setImageWithURL:placeholderImage:options:progress:completed:`");
-
-- (void)sd_setImageWithPreviousCachedImageWithURL:(NSURL *)url andPlaceholderImage:(UIImage *)placeholder options:(GMWebImageOptions)options progress:(GMWebImageDownloaderProgressBlock)progressBlock completed:(SDWebImageCompletionBlock)completedBlock param:(NSDictionary *)param __deprecated_msg("Method deprecated. Use `sd_setImageWithPreviousCachedImageWithURL:placeholderImage:options:progress:completed:`");
-
-- (void)setAnimationImagesWithURLs:(NSArray *)arrayOfURLs __deprecated_msg("Use `sd_setAnimationImagesWithURLs:`");
-
-- (void)cancelCurrentArrayLoad __deprecated_msg("Use `sd_cancelCurrentAnimationImagesLoad`");
-
-- (void)cancelCurrentImageLoad __deprecated_msg("Use `sd_cancelCurrentImageLoad`");
 
 @end

@@ -22,28 +22,28 @@ static char TAG_ACTIVITY_SHOW;
     [self gm_setImageWithURL:url placeholderImage:nil options:0 progress:nil completed:nil param:param];
 }
 
-- (void)sd_setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder param:(NSDictionary *)param {
+- (void)gm_setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder param:(NSDictionary *)param {
     [self gm_setImageWithURL:url placeholderImage:placeholder options:0 progress:nil completed:nil param:param];
 }
 
-- (void)sd_setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder options:(GMWebImageOptions)options param:(NSDictionary *)param {
+- (void)gm_setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder options:(GMWebImageOptions)options param:(NSDictionary *)param {
     [self gm_setImageWithURL:url placeholderImage:placeholder options:options progress:nil completed:nil param:param];
 }
 
-- (void)sd_setImageWithURL:(NSURL *)url completed:(SDWebImageCompletionBlock)completedBlock param:(NSDictionary *)param {
+- (void)gm_setImageWithURL:(NSURL *)url completed:(GMWebImageCompletionBlock)completedBlock param:(NSDictionary *)param {
     [self gm_setImageWithURL:url placeholderImage:nil options:0 progress:nil completed:completedBlock param:param];
 }
 
-- (void)sd_setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder completed:(SDWebImageCompletionBlock)completedBlock param:(NSDictionary *)param {
+- (void)gm_setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder completed:(GMWebImageCompletionBlock)completedBlock param:(NSDictionary *)param {
     [self gm_setImageWithURL:url placeholderImage:placeholder options:0 progress:nil completed:completedBlock param:param];
 }
 
-- (void)sd_setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder options:(GMWebImageOptions)options completed:(SDWebImageCompletionBlock)completedBlock param:(NSDictionary *)param {
+- (void)gm_setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder options:(GMWebImageOptions)options completed:(GMWebImageCompletionBlock)completedBlock param:(NSDictionary *)param {
     [self gm_setImageWithURL:url placeholderImage:placeholder options:options progress:nil completed:completedBlock param:param];
 }
 
-- (void)gm_setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder options:(GMWebImageOptions)options progress:(SDWebImageDownloaderProgressBlock)progressBlock completed:(SDWebImageCompletionBlock)completedBlock param:(NSDictionary *)param {
-    [self sd_cancelCurrentImageLoad];
+- (void)gm_setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder options:(GMWebImageOptions)options progress:(SDWebImageDownloaderProgressBlock)progressBlock completed:(GMWebImageCompletionBlock)completedBlock param:(NSDictionary *)param {
+    [self gm_cancelCurrentImageLoad];
     objc_setAssociatedObject(self, &imageURLKey, url, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     
     if (!(options & SDWebImageDelayPlaceholder)) {
@@ -96,25 +96,25 @@ static char TAG_ACTIVITY_SHOW;
     }
 }
 
-- (void)sd_setImageWithPreviousCachedImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder options:(GMWebImageOptions)options progress:(SDWebImageDownloaderProgressBlock)progressBlock completed:(SDWebImageCompletionBlock)completedBlock param:(NSDictionary *)param {
+- (void)gm_setImageWithPreviousCachedImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder options:(GMWebImageOptions)options progress:(SDWebImageDownloaderProgressBlock)progressBlock completed:(GMWebImageCompletionBlock)completedBlock param:(NSDictionary *)param {
     NSString *key = [[GMWebImageManager sharedManager] cacheKeyForURL:url];
     UIImage *lastPreviousCachedImage = [[SDImageCache sharedImageCache] imageFromDiskCacheForKey:key];
     
     [self gm_setImageWithURL:url placeholderImage:lastPreviousCachedImage ?: placeholder options:options progress:progressBlock completed:completedBlock param:param];
 }
 
-- (NSURL *)sd_imageURL {
+- (NSURL *)gm_imageURL {
     return objc_getAssociatedObject(self, &imageURLKey);
 }
 
-- (void)gm_setAnimationImagesWithURLs:(NSArray *)arrayOfURLs param:(NSDictionary *)param {
-    [self sd_cancelCurrentAnimationImagesLoad];
+- (void)gm_setAnimationImagesWithURLsAndParams:(NSArray *)arrayOfURLsAndParams {
+    [self gm_cancelCurrentAnimationImagesLoad];
     __weak __typeof(self)wself = self;
     
     NSMutableArray *operationsArray = [[NSMutableArray alloc] init];
     
-    for (NSURL *logoImageURL in arrayOfURLs) {
-        id <SDWebImageOperation> operation = [GMWebImageManager.sharedManager downloadImageWithURL:logoImageURL options:0 progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+    for (NSDictionary *logoImageURLAndParam in arrayOfURLsAndParams) {
+        id <SDWebImageOperation> operation = [GMWebImageManager.sharedManager downloadImageWithURL:logoImageURLAndParam[@"url"] options:0 progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
             if (!wself) return;
             dispatch_main_sync_safe(^{
                 __strong UIImageView *sself = wself;
@@ -131,18 +131,18 @@ static char TAG_ACTIVITY_SHOW;
                 }
                 [sself startAnimating];
             });
-        } param:param];
+        } param:logoImageURLAndParam[@"param"]];
         [operationsArray addObject:operation];
     }
     
     [self sd_setImageLoadOperation:[NSArray arrayWithArray:operationsArray] forKey:@"UIImageViewAnimationImages"];
 }
 
-- (void)sd_cancelCurrentImageLoad {
+- (void)gm_cancelCurrentImageLoad {
     [self sd_cancelImageLoadOperationWithKey:@"UIImageViewImageLoad"];
 }
 
-- (void)sd_cancelCurrentAnimationImagesLoad {
+- (void)gm_cancelCurrentAnimationImagesLoad {
     [self sd_cancelImageLoadOperationWithKey:@"UIImageViewAnimationImages"];
 }
 
@@ -209,75 +209,5 @@ static char TAG_ACTIVITY_SHOW;
         self.activityIndicator = nil;
     }
 }
-
-@end
-
-
-@implementation UIImageView (WebCacheDeprecated)
-
-- (NSURL *)imageURL {
-    return [self sd_imageURL];
-}
-
-- (void)setImageWithURL:(NSURL *)url {
-    [self gm_setImageWithURL:url placeholderImage:nil options:0 progress:nil completed:nil param:nil];
-}
-
-- (void)setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder {
-    [self gm_setImageWithURL:url placeholderImage:placeholder options:0 progress:nil completed:nil param:nil];
-}
-
-- (void)setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder options:(GMWebImageOptions)options {
-    [self gm_setImageWithURL:url placeholderImage:placeholder options:options progress:nil completed:nil param:nil];
-}
-
-- (void)setImageWithURL:(NSURL *)url completed:(SDWebImageCompletedBlock)completedBlock {
-    [self gm_setImageWithURL:url placeholderImage:nil options:0 progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-        if (completedBlock) {
-            completedBlock(image, error, cacheType);
-        }
-    } param:nil];
-}
-
-- (void)setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder completed:(SDWebImageCompletedBlock)completedBlock {
-    [self gm_setImageWithURL:url placeholderImage:placeholder options:0 progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-        if (completedBlock) {
-            completedBlock(image, error, cacheType);
-        }
-    } param:nil];
-}
-
-- (void)setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder options:(GMWebImageOptions)options completed:(SDWebImageCompletedBlock)completedBlock {
-    [self gm_setImageWithURL:url placeholderImage:placeholder options:options progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-        if (completedBlock) {
-            completedBlock(image, error, cacheType);
-        }
-    } param:nil];
-}
-
-- (void)setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder options:(GMWebImageOptions)options progress:(SDWebImageDownloaderProgressBlock)progressBlock completed:(SDWebImageCompletedBlock)completedBlock {
-    [self gm_setImageWithURL:url placeholderImage:placeholder options:options progress:progressBlock completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-        if (completedBlock) {
-            completedBlock(image, error, cacheType);
-        }
-    } param:nil];
-}
-
-- (void)sd_setImageWithPreviousCachedImageWithURL:(NSURL *)url andPlaceholderImage:(UIImage *)placeholder options:(GMWebImageOptions)options progress:(SDWebImageDownloaderProgressBlock)progressBlock completed:(SDWebImageCompletionBlock)completedBlock {
-    [self sd_setImageWithPreviousCachedImageWithURL:url placeholderImage:placeholder options:options progress:progressBlock completed:completedBlock param:nil];
-}
-
-- (void)cancelCurrentArrayLoad {
-    [self sd_cancelCurrentAnimationImagesLoad];
-}
-
-- (void)cancelCurrentImageLoad {
-    [self sd_cancelCurrentImageLoad];
-}
-
-- (void)setAnimationImagesWithURLs:(NSArray *)arrayOfURLs {
-    [self gm_setAnimationImagesWithURLs:arrayOfURLs param:nil];
-}
-
 
 @end
