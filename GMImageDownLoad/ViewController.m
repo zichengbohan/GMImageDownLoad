@@ -23,7 +23,6 @@
     [super viewDidLoad];
     [self.myImageView gm_setImageWithURL:[NSURL URLWithString:@"http://10.143.117.22:7080/myfang/apply/captcha"] param:@{@"key":@"1"}];
     
-//    NSString *path1 = [[NSBundle mainBundle] pathForResource:@"1" ofType:@"png"];
     NSMutableArray *arraym = [[NSMutableArray alloc] init];
     for (int i = 1; i < 9; i++) {
         NSString *path = [[NSBundle mainBundle] pathForResource:[NSString stringWithFormat:@"%d", i] ofType:@"png"];
