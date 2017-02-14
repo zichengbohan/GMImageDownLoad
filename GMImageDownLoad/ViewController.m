@@ -21,7 +21,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self.myImageView gm_setImageWithURL:[NSURL URLWithString:@"http://10.143.117.22:7080/myfang/apply/captcha"] param:@{@"key":@"1"}];
+    [self.myImageView gm_setImageWithURL:[NSURL URLWithString:@"http://10.143.117.19:8080/fen-api/getVerifyImgCode/?image_uid=0E403478-00C5-4188-AAE9-CCF5350C993D"] param:nil];
     
 //    NSString *path1 = [[NSBundle mainBundle] pathForResource:@"1" ofType:@"png"];
     NSMutableArray *arraym = [[NSMutableArray alloc] init];
